@@ -18,7 +18,7 @@ on:
 
 env:
   AZURE_FUNCTIONAPP_NAME: bfyoc-rating-api  # set this to your application's name
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './Source/bfyoc-rating-api' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'Source/bfyoc-rating-api' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '3.1.101'                    # set this to the .NET Core version to use
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
       uses: actions/upload-artifact@v2.1.4
       with:
         name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        path: './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/published'
+        path: '/${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/published'
         
   # deploy:
   #   name: Deploy Web App
