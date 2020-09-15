@@ -46,15 +46,31 @@ jobs:
         name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         path: '~/work/bfyoc-rating-api/bfyoc-rating-api/${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/published'
         
-  # deploy:
-  #   name: Deploy Web App
-  #   runs-on: ubuntu-latest
-  #   needs: [build, create]
-  #   steps:
-  #   - name: Download Build Artifact
-  #     uses: actions/download-artifact@v1
-  #     with:
-  #       name: ${{ env.AZURE_WEBAPP_NAME }}
+    - name: Publish Artifact2
+      uses: actions/upload-artifact@v2.1.4
+      with:
+        name: infrastructure
+        path: '~/work/bfyoc-rating-api/Infrastructure'
+        
+  provision:
+    name: Provision Infrastructure
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v2.0.5
+        with:
+          name: infrastructure
+        
+  deploy:
+    name: Deploy Function App
+    runs-on: ubuntu-latest
+    needs: [build, provision]
+    steps:
+    - name: Download Build Artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
 
   #   # Login to AZ CLI
   #   - uses: azure/login@v1
