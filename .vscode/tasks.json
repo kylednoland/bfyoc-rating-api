@@ -9,6 +9,9 @@
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
+			"options": {
+				"cwd": "${workspaceFolder}/Source/bfyoc-rating-api"
+			},
 			"type": "process",
 			"problemMatcher": "$msCompile"
 		},
@@ -26,6 +29,9 @@
 				"kind": "build",
 				"isDefault": true
 			},
+			"options": {
+				"cwd": "${workspaceFolder}/Source/bfyoc-rating-api"
+			},
 			"problemMatcher": "$msCompile"
 		},
 		{
@@ -38,6 +44,9 @@
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
+			"options": {
+				"cwd": "${workspaceFolder}/Source/bfyoc-rating-api"
+			},
 			"type": "process",
 			"problemMatcher": "$msCompile"
 		},
@@ -51,6 +60,9 @@
 				"/property:GenerateFullPaths=true",
 				"/consoleloggerparameters:NoSummary"
 			],
+			"options": {
+				"cwd": "${workspaceFolder}/Source/bfyoc-rating-api"
+			},
 			"type": "process",
 			"dependsOn": "clean release",
 			"problemMatcher": "$msCompile"
@@ -59,7 +71,7 @@
 			"type": "func",
 			"dependsOn": "build",
 			"options": {
-				"cwd": "${workspaceFolder}/bin/Debug/netcoreapp3.1"
+				"cwd": "${workspaceFolder}/Source/bfyoc-rating-api/bin/Debug/netcoreapp3.1"
 			},
 			"command": "host start",
 			"isBackground": true,
