@@ -44,7 +44,7 @@ jobs:
       uses: actions/upload-artifact@v2.1.4
       with:
         name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        path: '/${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/published'
+        path: '~/work/bfyoc-rating-api/bfyoc-rating-api/${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/published'
         
   # deploy:
   #   name: Deploy Web App
