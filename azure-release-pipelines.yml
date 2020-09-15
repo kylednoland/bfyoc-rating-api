@@ -1,0 +1,22 @@
+trigger: none
+
+resources:
+  pipelines:
+  - pipeline: build
+    source: 'demo-function-yaml-cicd - Build'
+  
+variables:
+  vmImageName: 'vs2017-win2016'
+  azureSubscription: ''
+
+stages:
+- template: azure-release-pipelines-stage-template.yml
+  parameters:
+    stageName: 'CI'
+    environment: 'API-CI'
+    azureSubscription: ${{ variables.azureSubscription }}
+    functionAppName: 'demo-function-api-ci'
+    resourceGroupName: 'demo-function-api-ci'
+    storageAccountName: 'azfunctionsdapici'
+    region: 'Central US'
+    packageName: 'Demo.Function.API.zip'
