@@ -40,17 +40,17 @@ jobs:
         dotnet build --configuration Release --output ./published
         popd
     
-    - name: Publish Artifact2
+    - name: Publish Build Artifact
       uses: actions/upload-artifact@v2.1.4
       with:
         name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
         path: '~/work/bfyoc-rating-api/bfyoc-rating-api/${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/published'
         
-    - name: Publish Artifact2
+    - name: Publish Infrastructure Artifact
       uses: actions/upload-artifact@v2.1.4
       with:
         name: infrastructure
-        path: '~/work/bfyoc-rating-api/Infrastructure'
+        path: '~/work/bfyoc-rating-api/bfyoc-rating-api/Infrastructure'
         
   provision:
     name: Provision Infrastructure
