@@ -19,7 +19,6 @@ on:
 env:
   AZURE_FUNCTIONAPP_NAME: bfyoc-rating-api  # set this to your application's name
   AZURE_FUNCTIONAPP_PACKAGE_PATH: './Source/bfyoc-rating-api' # set this to the path to your web app project, defaults to the repository root
-  AZURE_FUNCTIONAPP_OUTPUT_PATH: './published' # set this to the expected output path for the dotnet build artifact
   DOTNET_VERSION: '3.1.101'                    # set this to the .NET Core version to use
 
 jobs:
@@ -38,15 +37,15 @@ jobs:
       shell: bash
       run: |
         pushd './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}'
-        dotnet build --configuration Release --output ${{ env.AZURE_FUNCTIONAPP_OUTPUT_PATH }}
+        dotnet build --configuration Release --output ./published
         popd
     
-    - name: Publish Artifacts
-      uses: actions/upload-artifact@v1.0.0
+    - name: Publish Artifact2
+      uses: actions/upload-artifact@v2.1.4
       with:
         name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-        path: ${{ env.AZURE_FUNCTIONAPP_OUTPUT_PATH }}
-
+        path: './${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/published'
+        
   # deploy:
   #   name: Deploy Web App
   #   runs-on: ubuntu-latest
