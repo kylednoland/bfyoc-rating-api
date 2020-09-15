@@ -3,11 +3,11 @@ trigger: none
 resources:
   pipelines:
   - pipeline: build
-    source: 'demo-function-yaml-cicd - Build'
+    source: 'bfyoc-rating-api - BUILD'
   
 variables:
   vmImageName: 'vs2017-win2016'
-  azureSubscription: ''
+  azureSubscription: 'AZURE-PIPELINES-SPN'
 
 stages:
 - template: azure-release-pipelines-stage-template.yml
@@ -15,8 +15,8 @@ stages:
     stageName: 'CI'
     environment: 'API-CI'
     azureSubscription: ${{ variables.azureSubscription }}
-    functionAppName: 'demo-function-api-ci'
-    resourceGroupName: 'demo-function-api-ci'
-    storageAccountName: 'azfunctionsdapici'
-    region: 'Central US'
-    packageName: 'Demo.Function.API.zip'
+    functionAppName: 'bfyoc-rating-api-ci'
+    resourceGroupName: 'bfyoc-rating-api-ci'
+    storageAccountName: 'azfunctionsrapici'
+    region: 'East US'
+    packageName: 'bfyoc-rating-api.zip'
