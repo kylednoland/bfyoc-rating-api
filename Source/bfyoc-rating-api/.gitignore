@@ -348,5 +348,3 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
-Source/bfyoc-rating-api/local.settings.json
-Source/bfyoc-rating-api/Properties/serviceDependencies.local.json
