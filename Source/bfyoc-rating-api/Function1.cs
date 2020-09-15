@@ -12,24 +12,32 @@ namespace bfyoc_rating_api
 {
     public static class Function1
     {
-        [FunctionName("Function1")]
-        public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+        [FunctionName("GetRatings")]
+        public static async Task<IActionResult> GetRatings(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "user/{id}/ratings")] HttpRequest req,
+            ILogger log,
+            string id)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            if(Guid.TryParse(id, out Guid userId))
+            {
+                // Check user Id.
+            }
+            else
+            {
+                return new BadRequestObjectResult("The user id is not a GUID.");
+            }
 
-            string name = req.Query["name"];
+            // string name = req.Query["name"];
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            // string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+            // dynamic data = JsonConvert.DeserializeObject(requestBody);
+            // name = name ?? data?.name;
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+            // string responseMessage = string.IsNullOrEmpty(name)
+            //     ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
+            //     : $"Hello, {name}. This HTTP triggered function executed successfully.";
 
-            return new OkObjectResult(responseMessage);
+            return new OkResult();//OkObjectResult(responseMessage);
         }
     }
 }
