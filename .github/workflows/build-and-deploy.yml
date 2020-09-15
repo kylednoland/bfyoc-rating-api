@@ -23,7 +23,7 @@ env:
 
 jobs:
   build:
-    name: Build Web App
+    name: Build Function App
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -32,18 +32,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ env.DOTNET_VERSION }}
-    
-    - name: Restore packages
-      run: dotnet restore
 
-    - name: Build app
-      run: dotnet build --configuration Release --no-restore
-
-    # - name: Test app
-    #   run: dotnet test --no-build
-
-    - name: Publish app for deploy
-      run: dotnet publish --configuration Release --no-build --output ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+    - name: Build function for deploy
+      run: dotnet build --configuration Release --output ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
 
     - name: Publish Artifacts
       uses: actions/upload-artifact@v1.0.0
