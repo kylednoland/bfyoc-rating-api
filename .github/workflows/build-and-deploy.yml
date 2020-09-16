@@ -73,21 +73,10 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS  }}
           
-      # Deployment of template    
-      - name: Deploy ARM Template
-        uses: azure/arm-deploy@v1.0.1
-        with:
-          scope: 'resourcegroup'
-          deploymentMode: 'Incremental'
-          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
-          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
-          template: $GITHUB_WORKSPACE/function-app-consumption.json
-          parameters: $GITHUB_WORKSPACE/azuredeploy.parameters.json
-          
       - name: Deploy ARM
         uses: azure/CLI@v1
         with:
-          inlineScript: az deployment group create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} --mode Incremental --name actionsDeploy --template-file $GITHUB_WORKSPACE/function-app-consumption.json --parameters appName='bfyoc-rating-api-team-5' storageAccountName='azfunctionsbfyocstor'
+          inlineScript: az deployment group create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} --location eastus --mode Incremental --name actionsDeploy --template-file $GITHUB_WORKSPACE/function-app-consumption.json --parameters appName='bfyoc-rating-api-team-5' storageAccountName='azfunctionsbfyocstor'
           
       # Logout AZ CLI
       - name: az logout
