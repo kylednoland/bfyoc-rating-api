@@ -9,6 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bfyoc-clients-library\bfyoc-clients-library.csproj" />
+    <ProjectReference Include="..\bfyoc-objects-library\bfyoc-objects-library.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">

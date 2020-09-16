@@ -19,8 +19,6 @@ namespace bfyoc_rating_api
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string userId = data?.userId;
@@ -90,6 +88,34 @@ namespace bfyoc_rating_api
             await ratingClient.CreateRatingAsync(ratingObject);
 
             return new OkObjectResult(ratingObject);
+        }
+
+        [FunctionName("GetRatings")]
+        public static async Task<IActionResult> GetUserRatings(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{id}/ratings")] HttpRequest req,
+            ILogger log,
+            string id)
+        {
+            if(Guid.TryParse(id, out Guid userId))
+            {
+                // Check user Id.
+                var userClient = new UserClient();
+                var user = await userClient.RetrieveUserAsync(userId);
+
+                if(user == null)
+                {
+                    return new BadRequestObjectResult($"There is no user with Id {userId}.");
+                }
+
+                // Retrieve ratings
+                var ratingsClient = new RatingClient();
+                var ratings = await ratingsClient.RetrieveRatingsAsync(userId);
+                return new OkObjectResult(ratings);
+            }
+            else
+            {
+                return new BadRequestObjectResult("The user Id is not a GUID.");
+            }
         }
     }
 }
