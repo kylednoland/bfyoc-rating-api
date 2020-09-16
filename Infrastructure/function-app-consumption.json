@@ -65,7 +65,7 @@
     "apim-publisher": "bfyoc",
     "apim-publisher-email": "hacker36zm@OTAPRD1487ops.onmicrosoft.com",
     "apim-notification-email": "apimgmt-noreply@mail.windowsazure.com",
-    "apim-name": "[concat(variables('apim-publisher'), uniqueString(resourceGroup().id))]"
+    "apim-name": "[concat(variables('apim-publisher'), '-', uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
