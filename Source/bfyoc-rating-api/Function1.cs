@@ -89,9 +89,6 @@ namespace bfyoc_rating_api
             var ratingClient = new RatingClient();
             await ratingClient.CreateRatingAsync(ratingObject);
 
-            var tempRating = await ratingClient.RetrieveRatingAsync(new Guid("d690f292-6491-4c09-8d91-b48f29ffacb5"));
-            var tempRatings = await ratingClient.RetrieveRatingsAsync(ratingObject.userId);
-
             return new OkObjectResult(ratingObject);
         }
     }
