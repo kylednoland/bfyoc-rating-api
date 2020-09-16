@@ -64,8 +64,7 @@
     "functionWorkerRuntime": "[parameters('runtime')]",
     "apim-publisher": "bfyoc",
     "apim-publisher-email": "hacker36zm@OTAPRD1487ops.onmicrosoft.com",
-    "apim-notification-email": "apimgmt-noreply@mail.windowsazure.com",
-    "apim-name": "[concat(variables('apim-publisher'), '-', uniqueString(resourceGroup().id))]"
+    "apim-name": "[concat(variables('apim-publisher'), uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
@@ -170,27 +169,7 @@
       },
       "properties": {
         "publisherEmail": "[variables('apim-publisher-email')]",
-        "publisherName": "[variables('apim-publisher')]",
-        "notificationSenderEmail": "[variables('apim-notification-email')]",
-        "hostnameConfigurations": [
-          {
-            "type": "Proxy",
-            "hostName": "[concat(variables('apim-name'), '.azure-api.net')]",
-            "negotiateClientCertificate": false,
-            "defaultSslBinding": true
-          }
-        ],
-        "customProperties": {
-          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10": "False",
-          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11": "False",
-          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10": "False",
-          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11": "False",
-          "Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30": "False",
-          "Microsoft.WindowsAzure.ApiManagement.Gateway.Protocols.Server.Http2": "False"
-        },
-        "virtualNetworkType": "None",
-        "disableGateway": false,
-        "apiVersionConstraint": {}
+        "publisherName": "[variables('apim-publisher')]"
       }
     },
     {
