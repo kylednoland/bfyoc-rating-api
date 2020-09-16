@@ -160,7 +160,7 @@
             "type": "Microsoft.ApiManagement/service",
             "apiVersion": "2019-12-01",
             "name": "bfyoc-api",
-            "location": "East US",
+            "location": "[parameters('location')]",
             "sku": {
                 "name": "Consumption",
                 "capacity": 0
