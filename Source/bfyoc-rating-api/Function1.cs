@@ -13,7 +13,7 @@ namespace bfyoc_rating_api
     public static class Function1
     {
         [FunctionName("GetRatings")]
-        public static async Task<IActionResult> GetRatings(
+        public static async Task<IActionResult> GetUserRatings(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "user/{id}/ratings")] HttpRequest req,
             ILogger log,
             string id)
@@ -21,6 +21,7 @@ namespace bfyoc_rating_api
             if(Guid.TryParse(id, out Guid userId))
             {
                 // Check user Id.
+                // Retrieve ratings
             }
             else
             {
