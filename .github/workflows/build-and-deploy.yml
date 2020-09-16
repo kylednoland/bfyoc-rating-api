@@ -85,7 +85,7 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: '~/work/bfyoc-rating-api/bfyoc-rating-api/function-app-consumption.json'
-          parameters: "appName='bfyoc-rating-api-team-5' storageAccountName='azfunctionsbfyocstor'"
+          parameters: "appName='bfyoc-rating-api-team-5' storageAccountName='azbfyocstor'"
           
       # Logout AZ CLI
       - name: az logout
