@@ -17,11 +17,12 @@ on:
       - master
 
 env:
-  AZURE_FUNCTIONAPP_NAME: bfyoc-rating-api  # set this to your application's name
+  AZURE_FUNCTIONAPP_NAME: bfyoc-rating-api-team-5  # set this to your application's name
+  AZURE_STORAGEACCT_NAME: azbfyocstor # set this to your storage account name
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'Source/bfyoc-rating-api' # set this to the path to your web app project, defaults to the repository root
-  DOTNET_VERSION: '3.1.101'                    # set this to the .NET Core version to use
-  AZURE_SUBSCRIPTION_ID: 'd8a7fa71-02cd-45ab-abbe-e3071eca1519'
-  AZURE_RESOURCE_GROUP: 'bfyoc-rating-api-actions'
+  DOTNET_VERSION: '3.1.101' # set this to the .NET Core version to use
+  AZURE_SUBSCRIPTION_ID: 'd8a7fa71-02cd-45ab-abbe-e3071eca1519' # set this to your subscription ID
+  AZURE_RESOURCE_GROUP: 'bfyoc-rating-api-actions' # set this to your resource group name
   
 
 jobs:
@@ -85,7 +86,7 @@ jobs:
           subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
           resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
           template: '~/work/bfyoc-rating-api/bfyoc-rating-api/function-app-consumption.json'
-          parameters: 'appName=bfyoc-rating-api-team-5 storageAccountName=azbfyocstor'
+          parameters: 'appName=${{ env.AZURE_FUNCTIONAPP_NAME }} storageAccountName=${{ AZURE_STORAGEACCT_NAME }}'
           
       # Logout AZ CLI
       - name: az logout
