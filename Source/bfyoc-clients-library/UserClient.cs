@@ -13,7 +13,7 @@ namespace bfyoc_clients_library
         private string userUrl = "https://serverlessohuser.trafficmanager.net/api/GetUser";
         private static HttpClient httpClient = new HttpClient();
 
-        public async Task<User> GetUserAsync(Guid userId)
+        public async Task<User> RetrieveUserAsync(Guid userId)
         {
             var finalProductUrl = string.Format("{0}?userId={1}", userUrl, userId.ToString());
             var responseText = await httpClient.GetStringAsync(finalProductUrl);
