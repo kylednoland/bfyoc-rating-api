@@ -19,8 +19,6 @@ namespace bfyoc_rating_api
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
             string userId = data?.userId;
@@ -30,14 +28,17 @@ namespace bfyoc_rating_api
             string userNotes = data?.userNotes;
 
 
-            string responseMessage = 
+            if(
             string.IsNullOrEmpty(userId) || 
             string.IsNullOrEmpty(productId) || 
             string.IsNullOrEmpty(locationName) ||  
             string.IsNullOrEmpty(rating) ||
             string.IsNullOrEmpty(userNotes)
-                ? "This HTTP triggered function executed successfully. Pass UserId, ProductID, LocationName, Rating and UserNotes in the request body for a personalized response."
-                : $"{userId} {productId} {locationName} {rating} {userNotes}. This HTTP triggered function executed successfully.";
+            )
+            {
+                var message = "Missing paramaters. Pass UserId, ProductID, LocationName, Rating and UserNotes in the request body for a personalized response.";
+                return new BadRequestObjectResult(message);
+            }
 
             //Make sure Product ID is valid
             var productClient = new ProductClient();
@@ -45,8 +46,8 @@ namespace bfyoc_rating_api
             var product = await productClient.RetrieveProductAsync(productIdGuid);
             if(product == null)
             {
-                responseMessage = "Invalid Product ID. Please try again with a valid Product ID";
-                return new OkObjectResult(responseMessage);
+                var responseMessage = "Invalid Product ID. Please try again with a valid Product ID";
+                return new BadRequestObjectResult(responseMessage);
             }
 
             //Make sure User ID is valid
@@ -55,8 +56,8 @@ namespace bfyoc_rating_api
             var user = await userClient.RetrieveUserAsync(userIdGuid);
             if(user == null)
             {
-                responseMessage = "Invalid User ID. Please try again with a valid User ID";
-                return new OkObjectResult(responseMessage);
+                var responseMessage = "Invalid User ID. Please try again with a valid User ID";
+                return new BadRequestObjectResult(responseMessage);
             }
 
             //Make sure rating is a number between 1 and 5
@@ -71,8 +72,8 @@ namespace bfyoc_rating_api
             }
             catch (Exception ex)
             {
-                responseMessage = "Invalid Rating. Please try again with a rating that is a number between 1 and 5";
-                return new OkObjectResult(responseMessage);
+                var responseMessage = "Invalid Rating. Please try again with a rating that is a number between 1 and 5";
+                return new BadRequestObjectResult(responseMessage);
             }
 
             //All Parameters are valid, build the rating object
@@ -92,6 +93,7 @@ namespace bfyoc_rating_api
             return new OkObjectResult(ratingObject);
         }
 
+
         [FunctionName("GetRating")]
         public static async Task<IActionResult> GetRatingById(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
@@ -99,7 +101,7 @@ namespace bfyoc_rating_api
         {
 
             string ratingId = req.Query["ratingId"];
-            
+
             if (Guid.TryParse(ratingId, out Guid id))
             {
                 var ratingClient = new RatingClient();
@@ -121,6 +123,35 @@ namespace bfyoc_rating_api
             else
             {
                 return new BadRequestObjectResult($"There is no rating with Id {ratingId}.");
+
+            }
+        }
+
+        [FunctionName("GetRatings")]
+        public static async Task<IActionResult> GetUserRatings(
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{id}/ratings")] HttpRequest req,
+            ILogger log,
+            string id)
+        {
+            if(Guid.TryParse(id, out Guid userId))
+            {
+                // Check user Id.
+                var userClient = new UserClient();
+                var user = await userClient.RetrieveUserAsync(userId);
+
+                if(user == null)
+                {
+                    return new BadRequestObjectResult($"There is no user with Id {userId}.");
+                }
+
+                // Retrieve ratings
+                var ratingsClient = new RatingClient();
+                var ratings = await ratingsClient.RetrieveRatingsAsync(userId);
+                return new OkObjectResult(ratings);
+            }
+            else
+            {
+                return new BadRequestObjectResult("The user Id is not a GUID.");
             }
         }
     }

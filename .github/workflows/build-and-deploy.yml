@@ -20,6 +20,9 @@ env:
   AZURE_FUNCTIONAPP_NAME: bfyoc-rating-api  # set this to your application's name
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'Source/bfyoc-rating-api' # set this to the path to your web app project, defaults to the repository root
   DOTNET_VERSION: '3.1.101'                    # set this to the .NET Core version to use
+  AZURE_SUBSCRIPTION_ID: 'd8a7fa71-02cd-45ab-abbe-e3071eca1519'
+  AZURE_RESOURCE_GROUP: 'bfyoc-rating-api-actions'
+  
 
 jobs:
   build:
@@ -61,6 +64,24 @@ jobs:
         uses: actions/download-artifact@v2.0.5
         with:
           name: infrastructure
+          
+      # Authentication
+      # Set up the following secrets in your repository: AZURE_CREDENTIALS
+      # For details on usage of secrets, please refer https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS  }}
+          
+      - name: Deploy ARM
+        uses: azure/CLI@v1
+        with:
+          inlineScript: az deployment group create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --subscription ${{ env.AZURE_SUBSCRIPTION_ID }} --location eastus --mode Incremental --name actionsDeploy --template-file $GITHUB_WORKSPACE/function-app-consumption.json --parameters appName='bfyoc-rating-api-team-5' storageAccountName='azfunctionsbfyocstor'
+          
+      # Logout AZ CLI
+      - name: az logout
+        run: |
+         az logout
         
   deploy:
     name: Deploy Function App
@@ -72,19 +93,21 @@ jobs:
       with:
         name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
 
-  #   # Login to AZ CLI
-  #   - uses: azure/login@v1
-  #     with:
-  #       creds: ${{ secrets.AZURE_DEPLOY_CREDS }}
-    
-  #   # Deploy app
-  #   - name: 'Deploy to Azure WebApp'
-  #     uses: azure/webapps-deploy@v1
-  #     with:
-  #      app-name: ${{ env.AZURE_WEBAPP_NAME }}
-  #      package: ${{ env.AZURE_WEBAPP_NAME }}
-
-  #   # Logout AZ CLI
-  #   - name: logout
-  #     run: |
-  #       az logout
+      # Authentication
+      # Set up the following secrets in your repository: AZURE_CREDENTIALS
+      # For details on usage of secrets, please refer https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+         creds: ${{ secrets.AZURE_CREDENTIALS  }}
+        
+    - name: Deploy Function App
+      uses: Azure/functions-action@v1.1.5
+      with:
+        app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+        package: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          
+    # Logout AZ CLI
+    - name: az logout
+      run: |
+       az logout
