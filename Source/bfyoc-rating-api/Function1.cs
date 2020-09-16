@@ -28,14 +28,17 @@ namespace bfyoc_rating_api
             string userNotes = data?.userNotes;
 
 
-            string responseMessage = 
+            if(
             string.IsNullOrEmpty(userId) || 
             string.IsNullOrEmpty(productId) || 
             string.IsNullOrEmpty(locationName) ||  
             string.IsNullOrEmpty(rating) ||
             string.IsNullOrEmpty(userNotes)
-                ? "This HTTP triggered function executed successfully. Pass UserId, ProductID, LocationName, Rating and UserNotes in the request body for a personalized response."
-                : $"{userId} {productId} {locationName} {rating} {userNotes}. This HTTP triggered function executed successfully.";
+            )
+            {
+                var message = "Missing paramaters. Pass UserId, ProductID, LocationName, Rating and UserNotes in the request body for a personalized response.";
+                return new BadRequestObjectResult(message);
+            }
 
             //Make sure Product ID is valid
             var productClient = new ProductClient();
@@ -43,8 +46,8 @@ namespace bfyoc_rating_api
             var product = await productClient.RetrieveProductAsync(productIdGuid);
             if(product == null)
             {
-                responseMessage = "Invalid Product ID. Please try again with a valid Product ID";
-                return new OkObjectResult(responseMessage);
+                var responseMessage = "Invalid Product ID. Please try again with a valid Product ID";
+                return new BadRequestObjectResult(responseMessage);
             }
 
             //Make sure User ID is valid
@@ -53,8 +56,8 @@ namespace bfyoc_rating_api
             var user = await userClient.RetrieveUserAsync(userIdGuid);
             if(user == null)
             {
-                responseMessage = "Invalid User ID. Please try again with a valid User ID";
-                return new OkObjectResult(responseMessage);
+                var responseMessage = "Invalid User ID. Please try again with a valid User ID";
+                return new BadRequestObjectResult(responseMessage);
             }
 
             //Make sure rating is a number between 1 and 5
@@ -69,8 +72,8 @@ namespace bfyoc_rating_api
             }
             catch (Exception ex)
             {
-                responseMessage = "Invalid Rating. Please try again with a rating that is a number between 1 and 5";
-                return new OkObjectResult(responseMessage);
+                var responseMessage = "Invalid Rating. Please try again with a rating that is a number between 1 and 5";
+                return new BadRequestObjectResult(responseMessage);
             }
 
             //All Parameters are valid, build the rating object
