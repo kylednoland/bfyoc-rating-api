@@ -61,7 +61,10 @@
     "storageAccountName": "[parameters('storageAccountName')]",
     "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
     "functionAppid": "[concat(resourceGroup().id,'/providers/','Microsoft.Web/sites/', variables('functionAppName'))]",
-    "functionWorkerRuntime": "[parameters('runtime')]"
+    "functionWorkerRuntime": "[parameters('runtime')]",
+    "apim-publisher": "bfyoc",
+    "apim-publisher-email": "hacker36zm@OTAPRD1487ops.onmicrosoft.com",
+    "apim-name": "[concat(variables('apim-publisher'), uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
@@ -141,7 +144,7 @@
         }
       }
     },
-   {
+    {
       "comments": "CORS allow origins *.",
       "type": "Microsoft.Web/sites/config",
       "name": "[concat(variables('functionAppName'), '/web')]",
@@ -154,8 +157,21 @@
         }
       },
       "dependsOn": []
-    }
-,
+    },
+    {
+      "type": "Microsoft.ApiManagement/service",
+      "apiVersion": "2019-12-01",
+      "name": "[variables('apim-name')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "Consumption",
+        "capacity": 0
+      },
+      "properties": {
+        "publisherEmail": "[variables('apim-publisher-email')]",
+        "publisherName": "[variables('apim-publisher')]"
+      }
+    },
     {
       "apiVersion": "2015-05-01",
       "name": "[variables('applicationInsightsName')]",
