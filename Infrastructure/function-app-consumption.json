@@ -141,6 +141,21 @@
         }
       }
     },
+   {
+      "comments": "CORS allow origins *.",
+      "type": "Microsoft.Web/sites/config",
+      "name": "[concat(variables('functionAppName'), '/web')]",
+      "apiVersion": "2016-08-01",
+      "properties": {
+        "cors": {
+          "allowedOrigins": [
+            "*"
+          ]
+        }
+      },
+      "dependsOn": []
+    }
+,
     {
       "apiVersion": "2015-05-01",
       "name": "[variables('applicationInsightsName')]",
