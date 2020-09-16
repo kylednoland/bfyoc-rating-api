@@ -47,7 +47,7 @@ namespace bfyoc_rating_api
             if(product == null)
             {
                 var responseMessage = "Invalid Product ID. Please try again with a valid Product ID";
-                return new BadRequestObjectResult(responseMessage);
+                return new NotFoundObjectResult(responseMessage);
             }
 
             //Make sure User ID is valid
@@ -57,7 +57,7 @@ namespace bfyoc_rating_api
             if(user == null)
             {
                 var responseMessage = "Invalid User ID. Please try again with a valid User ID";
-                return new BadRequestObjectResult(responseMessage);
+                return new NotFoundObjectResult(responseMessage);
             }
 
             //Make sure rating is a number between 1 and 5
@@ -111,18 +111,18 @@ namespace bfyoc_rating_api
 
                     if (rating == null)
                     {
-                        return new BadRequestObjectResult($"There is no rating with Id {ratingId}.");
+                        return new NotFoundObjectResult($"There is no rating with Id {ratingId}.");
                     }
                     return new OkObjectResult(rating);
                 }
                 catch
                 {
-                    return new BadRequestObjectResult($"There is no rating with Id {ratingId}.");
+                    return new NotFoundObjectResult($"There is no rating with Id {ratingId}.");
                 }
             }
             else
             {
-                return new BadRequestObjectResult($"There is no rating with Id {ratingId}.");
+                return new BadRequestObjectResult($"The Id is not a Guid.");
 
             }
         }
@@ -141,7 +141,7 @@ namespace bfyoc_rating_api
 
                 if(user == null)
                 {
-                    return new BadRequestObjectResult($"There is no user with Id {userId}.");
+                    return new NotFoundObjectResult($"There is no user with Id {userId}.");
                 }
 
                 // Retrieve ratings
