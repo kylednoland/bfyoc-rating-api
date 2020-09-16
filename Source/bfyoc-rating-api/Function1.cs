@@ -93,6 +93,40 @@ namespace bfyoc_rating_api
             return new OkObjectResult(ratingObject);
         }
 
+
+        [FunctionName("GetRating")]
+        public static async Task<IActionResult> GetRatingById(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+            ILogger log)
+        {
+
+            string ratingId = req.Query["ratingId"];
+
+            if (Guid.TryParse(ratingId, out Guid id))
+            {
+                var ratingClient = new RatingClient();
+                try
+                {
+                    var rating = await ratingClient.RetrieveRatingAsync(id);
+
+                    if (rating == null)
+                    {
+                        return new BadRequestObjectResult($"There is no rating with Id {ratingId}.");
+                    }
+                    return new OkObjectResult(rating);
+                }
+                catch
+                {
+                    return new BadRequestObjectResult($"There is no rating with Id {ratingId}.");
+                }
+            }
+            else
+            {
+                return new BadRequestObjectResult($"There is no rating with Id {ratingId}.");
+
+            }
+        }
+
         [FunctionName("GetRatings")]
         public static async Task<IActionResult> GetUserRatings(
             [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{id}/ratings")] HttpRequest req,
