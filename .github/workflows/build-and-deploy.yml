@@ -78,10 +78,14 @@ jobs:
         with:
           inlineScript: az group create -l eastus -n ${{ env.AZURE_RESOURCE_GROUP }}
       
-      - name: Deploy ARM
-        uses: azure/CLI@v1
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1.0.1
         with:
-          inlineScript: az deployment group create --resource-group ${{ env.AZURE_RESOURCE_GROUP }} --mode Incremental --name actionsDeploy --template-file $GITHUB_WORKSPACE/function-app-consumption.json --parameters appName='bfyoc-rating-api-team-5' storageAccountName='azfunctionsbfyocstor'
+          scope: 'resourcegroup'
+          subscriptionId: ${{ env.AZURE_SUBSCRIPTION_ID }}
+          resourceGroupName: ${{ env.AZURE_RESOURCE_GROUP }}
+          template: $GITHUB_WORKSPACE/function-app-consumption.json
+          parameters: "appName='bfyoc-rating-api-team-5' storageAccountName='azfunctionsbfyocstor'"
           
       # Logout AZ CLI
       - name: az logout
