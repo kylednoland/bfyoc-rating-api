@@ -93,38 +93,30 @@ namespace bfyoc_rating_api
 
         [FunctionName("GetRatings")]
         public static async Task<IActionResult> GetUserRatings(
-            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "user/{id}/ratings")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", Route = "users/{id}/ratings")] HttpRequest req,
             ILogger log,
             string id)
         {
-            IActionResult result;
-
             if(Guid.TryParse(id, out Guid userId))
             {
                 // Check user Id.
-                var httpClient = new HttpClient();
+                var userClient = new UserClient();
+                var user = await userClient.RetrieveUserAsync(userId);
+
+                if(user == null)
+                {
+                    return new BadRequestObjectResult($"There is no user with Id {userId}.");
+                }
 
                 // Retrieve ratings
-                result = new OkResult();
+                var ratingsClient = new RatingClient();
+                var ratings = await ratingsClient.RetrieveRatingsAsync(userId);
+                return new OkObjectResult(ratings);
             }
             else
             {
-                result = new BadRequestObjectResult("The user id is not a GUID.");
+                return new BadRequestObjectResult("The user Id is not a GUID.");
             }
-
-            // string name = req.Query["name"];
-
-            // string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            // dynamic data = JsonConvert.DeserializeObject(requestBody);
-            // name = name ?? data?.name;
-
-            // string responseMessage = string.IsNullOrEmpty(name)
-            //     ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-            //     : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            //OkObjectResult(responseMessage);
-
-            return result;
         }
     }
 }
