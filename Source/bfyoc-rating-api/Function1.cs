@@ -16,7 +16,7 @@ namespace bfyoc_rating_api
     {
         [FunctionName("CreateRating")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequest req,
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
@@ -88,6 +88,9 @@ namespace bfyoc_rating_api
             //Create The Rating Object in the CosmosDB
             var ratingClient = new RatingClient();
             await ratingClient.CreateRatingAsync(ratingObject);
+
+            var tempRating = await ratingClient.RetrieveRatingAsync(new Guid("d690f292-6491-4c09-8d91-b48f29ffacb5"));
+            var tempRatings = await ratingClient.RetrieveRatingsAsync(ratingObject.userId);
 
             return new OkObjectResult(ratingObject);
         }
