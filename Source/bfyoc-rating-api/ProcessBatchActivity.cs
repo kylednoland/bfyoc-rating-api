@@ -12,12 +12,10 @@ namespace bfyoc_rating_api
     public static class ProcessBatchActivity
     {
         [FunctionName("ProcessBatchActivity")]
-        public static async Task ProcessBatch([OrchestrationTrigger] IDurableOrchestrationContext context)
+        public static async Task ProcessBatch([OrchestrationTrigger] IDurableOrchestrationContext context, ILogger log)
         {
             var EntityId = context.GetInput<EntityId>();
-            EntityId.ToString();
-            // DO SOMETHING
+            log.LogInformation($"Processing batch: {EntityId.EntityKey}");
         }
-
     }
 }
