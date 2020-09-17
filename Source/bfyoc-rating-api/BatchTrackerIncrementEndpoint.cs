@@ -19,7 +19,8 @@ namespace bfyoc_rating_api
             string batchId)
         {
             var entityId = new EntityId("BatchTracker", batchId);
-            await context.SignalEntityAsync(entityId, "Add");
+            context.SignalEntityAsync(entityId, "Add").Wait();
+
             var currentValue = await context.ReadEntityStateAsync<BatchTracker>(entityId);
             return new OkObjectResult(currentValue);
         }
