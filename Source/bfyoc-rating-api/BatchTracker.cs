@@ -19,6 +19,11 @@ namespace bfyoc_rating_api
         public void Add()
         {
             this.Value += 1;
+
+            if (Value >= 3)
+            {
+                Entity.Current.StartNewOrchestration("ProcessBatchActivity", Entity.Current.EntityId);
+            }
         }
 
         public Task Reset()
